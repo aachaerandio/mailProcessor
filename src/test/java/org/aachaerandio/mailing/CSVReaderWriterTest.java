@@ -57,4 +57,10 @@ public class CSVReaderWriterTest {
         Assert.assertEquals("hello", columns[0]);
         Assert.assertEquals("world", columns[1]);
     }
+
+    @Test
+    public void test1() throws Exception {
+        csvReaderWriter.open("src/test/resources/test2.csv", CSVReaderWriter.Mode.Read);
+        csvReaderWriter.read();
+    }
 }
