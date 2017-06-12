@@ -4,6 +4,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Optional;
+
 public class CSVReaderWriterTest {
 
     private CSVReaderWriter csvReaderWriter;
@@ -59,8 +61,25 @@ public class CSVReaderWriterTest {
     }
 
     @Test
-    public void test1() throws Exception {
+    public void shouldReadLine() throws Exception {
         csvReaderWriter.open("src/test/resources/test2.csv", CSVReaderWriter.Mode.Read);
-        csvReaderWriter.read();
+        Optional<String[]> line = csvReaderWriter.read();
+        csvReaderWriter.close();
+
+        Assert.assertEquals("hello", line.get()[0]);
+        Assert.assertEquals("world", line.get()[1]);
+        Assert.assertEquals("bye", line.get()[2]);
+    }
+
+    @Test
+    public void shouldReadAndReturnRequiredColumns() throws Exception {
+        int numberRequiredColumns = 4;
+        csvReaderWriter.open("src/test/resources/test2.csv", CSVReaderWriter.Mode.Read);
+        Optional<String[]> line = csvReaderWriter.read(numberRequiredColumns);
+        csvReaderWriter.close();
+
+        Assert.assertEquals("hello", line.get()[0]);
+        Assert.assertEquals("world", line.get()[1]);
+        Assert.assertEquals(numberRequiredColumns, line.get().length);
     }
 }

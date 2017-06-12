@@ -31,6 +31,12 @@ public class CSVReaderWriter {
         Read, Write
     }
 
+    /**
+     * Open file in the specified mode.
+     * @param fileName file to open
+     * @param mode either is read or write mode
+     * @throws Exception
+     */
     public void open(String fileName, Mode mode) throws Exception {
         if (mode == Mode.Read)
         {
@@ -47,21 +53,31 @@ public class CSVReaderWriter {
         }
     }
 
+    /**
+     * Create a String composed of elements joined with the specified separator and write a line in the file.
+     * @param columns elements for composing a line and write it on the file.
+     * @throws IOException
+     */
     public void write(String... columns) throws IOException {
         String outPut = String.join(SEPARATOR, columns);
         writeLine(outPut);
     }
 
+    /**
+     * This method return an array including the data of a line of the file.
+     * @return array with data of a line of the file.
+     * @throws IOException
+     */
     public Optional<String[]> read() throws IOException {
         return readLine().map(l -> l.split(SEPARATOR));
     }
 
     /**
      * This method returns an array of the specified length in <tt>numColumns</tt>.
-     * If the source array's length is greater than <tt>numColumns</tt>, the rest of positions in the array are filled with null.
+     * If the source array's length is smaller than <tt>numColumns</tt>, the rest of positions in the returned array are filled with null.
      * In other case a sub array of the source array is returned.
      * @param numColumns the number of columns expected from the line in the file.
-     * @return
+     * @return array with required columns.
      * @throws IOException
      */
     public Optional<String[]> read(int numColumns) throws IOException {
@@ -92,7 +108,7 @@ public class CSVReaderWriter {
     /**
      * @deprecated use {@link #read(int)} instead.
      *
-     * This method it meant to return the value of columns 1 and 2 of a line.
+     * Review: This method it meant to return the value of columns 1 and 2 of a line.
      * Modifying the variables column1 and 2 inside the method will not affect the original variables from where the method was called
      * This could be done by using a mutable class, like StringBuilder, instead of String
      *
@@ -118,13 +134,17 @@ public class CSVReaderWriter {
             column2 = null;
             return false;
         }
-
     }
 
     private void writeLine(String line) throws IOException {
         bufferedWriter.write(line);
     }
 
+    /**
+     * Read a line. Wrap returned String in an Optional object if non-null, otherwise returns Optional.Empty.
+     * @return
+     * @throws IOException
+     */
     private Optional<String> readLine() throws IOException {
         return Optional.ofNullable(bufferedReader.readLine());
     }
